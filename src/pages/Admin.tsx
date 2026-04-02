@@ -228,7 +228,7 @@ export default function Admin() {
               <div className="modal-profile-row"><span>Email</span><span>{profileModal.player.email}</span></div>
               <div className="modal-profile-row">
                 <span>Membre depuis</span>
-                <span>{formatDate(profileModal.player.createdAt)}</span>
+                <span>{profileModal.player.createdAt ? formatDate(profileModal.player.createdAt) : '—'}</span>
               </div>
               <div className="modal-profile-row">
                 <span>Statut</span>
