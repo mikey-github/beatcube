@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import api from '../api/axios';
 
 export default function Navbar() {
   const { user, isAdmin, logout } = useAuth();
@@ -18,26 +19,17 @@ export default function Navbar() {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadForm.file) return;
-    const token = localStorage.getItem('token');
     const data = new FormData();
     data.append('file', uploadForm.file);
     data.append('name', uploadForm.name);
     data.append('singer', uploadForm.singer);
     data.append('year', uploadForm.year);
     try {
-      const res = await fetch('http://localhost:8000/api/musique/upload', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: data,
-      });
-      if (res.ok) {
-        setUploadMsg('Musique uploadée avec succès !');
-        setUploadForm({ name: '', singer: '', year: '', file: null });
-      } else {
-        setUploadMsg("Erreur lors de l'upload.");
-      }
+      await api.post('/musique/upload', data);
+      setUploadMsg('Musique uploadée avec succès !');
+      setUploadForm({ name: '', singer: '', year: '', file: null });
     } catch {
-      setUploadMsg("Erreur réseau.");
+      setUploadMsg("Erreur lors de l'upload.");
     }
   };
 
